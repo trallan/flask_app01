@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Memes{% endblock %}
+{% block meta %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="30;url=https://pigcat.pythonanywhere.com/meme" />
+{% endblock %}
+
+{% block content %}
+	<h1>A website to gather some memes!</h1>
+	<p>Here is your meme! This will refresh in 30 second!</p>
+	<p><img src="{{meme_pic}}"</p>
+	<p>Current subreddit: subreddit</p>
+{% endblock %}

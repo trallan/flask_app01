@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Person List{% endblock  %}
+{% block content %}
+	<h1>Person List</h1>
+	<form action="/add" method="POST">
+		<input type="text" name="person" placeholder="Add a person" required class="border-2">
+		<button type="submit">Add</button><br>
+	</form>
+	<ul class="list-none">
+		{% for person in persons %}
+			<li class="flex items-center space-x-4 py-2">
+				<span class="text-lg font-semibold text-gray-700">{{ person[1] }}</span>
+				<a href="/delete/{{ person[0] }}">Delete</a>
+				<a href="/update/{{ person[0] }}">Update</a>
+			</li>
+
+		{% endfor %}
+
+
+	<h1>Add books to the library</h1>
+	<form action="/addbook" method="POST">
+		<input type="text" name="book_title" placeholder="Add title" required class="border-2"><br>
+		<input type="text" name="book_author" placeholder="Add author" required class="border-2"><br>
+		<input type="text" name="book_desc" placeholder="Add a book description" required class="border-2"><br>
+		<input type="number" name="book_pages" placeholder="Add book pages" required class="border-2"><br>
+		<input type="number" name="book_year" placeholder="Add book year" required class="border-2"><br>
+		<input type="number" name="book_rating" placeholder="Add rating" required class="border-2"><br>
+		<button type="submit">Add</button>
+	</form>
+
+{% endblock %}

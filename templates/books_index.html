@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Book List{%  endblock %}
+
+{% block content %}
+	<h1 class="text-3xl font-bold">Book List</h1>
+	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+		{% for book in books %}
+	        <div class="bg-white p-4 shadow-md rounded-lg">
+        	    <h2 class="text-xl font-semibold">{{ book[1] }}</h2> <!-- Book title -->
+	            <p class="text-gray-500">{{ book[2] }} - {{ book[3] }} pages</p> <!-- Author and pages -->
+	            <p class="text-gray-700">Rating: {{ book[6] }} / 5 stars</p> <!-- Rating -->
+	        </div>
+    		{% endfor %}
+	</div>
+{% endblock %}

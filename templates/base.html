@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Flask App{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .navbar { background-color: #333; padding: 10px; }
+        .navbar a { color: white; text-decoration: none; margin-right: 15px; }
+        .navbar a:hover { text-decoration: underline; }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="mx-4 sm:mx-16 lg:mx-64">
+    <div class="navbar flex justify-around">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="/books">Books</a> <!-- Adjust URL as needed -->
+   	<a href="/memes">Memes</a>
+	{% if 'user_id' not in session %}
+	  <a href="/login">Login</a>
+	{% else %}
+	  <a href="/logout">Logout</a>
+	{% endif %}
+    </div>
+    
+    <div class="content m-16">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
