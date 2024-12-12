@@ -16,15 +16,17 @@
     
     <!-- Login form -->
 	<div class="max-w-md mx-auto mt-10">
-	<h1 class="text-3xl font-bold mb-5">Login</h1>
-    	<form action="/login" method="POST">
+	<h1 class="text-3xl font-serif text-[#65615a] font-bold mb-5">Login</h1>
+    	<form action="/login" method="POST" class="bg-[#f4ecdf] text-[#65615a] text-center py-16 shadow-[#514e4b] shadow-md">
 		<div class="mb-4">
-         		<input type="text" name="username" placeholder="Username" required class="border-2">
+			<label class="font-serif">Username</label><br>
+         		<input type="text" name="username" required class="border-2 border-[#99958e] bg-transparent">
           	</div>
 	 	<div class="mb-4">
-	    		<input type="password" name="password" placeholder="Password" required class="border-2">
+			<label class="font-serif">Password</label><br>
+	    		<input type="password" name="password" required class="border-2 border-[#99958e] bg-transparent">
 	  	</div>
-          	<button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Login</button>
+          	<button type="submit" class="bg-[#99958e] text-white px-4 py-2 rounded">Login</button>
 	</form>
 	</div>
 {% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="post-container" class="font-serif flex text-center flex-col w-12/12">
+	<!--<span class="">Post #0</span>
+	<div id="header" class="flex justify-center flex-col mb-8">
+		<h1 class="text-xl">My First Blog Post!</h1>
+		<p class="text-gray-500">9 December 2024</p>
+	</div>
+
+	<div id="text-content flex justify-center">
+		<p>
+			This is my first blog, This is hardcoded text directly from the html file.</br>
+			My next step is to implement add/update/delete future.
+			test
+		</p>
+
+	</div>
+	-->
+	{% for post in blogposts|reverse %}
+	<div class="text-[#65615a] shadow-[#514e4b] shadow-md m-4 lg:py-32 py-8 bg-[#f4ecdf]">
+		<span class="">Post #{{post[0]}}</span>
+	        <div class="flex justify-center flex-col mb-8">
+	                <h1 class="text-2xl">{{post[1]}}</h1>
+	                <p class="text-[#bdb7ac] text-sm">{{post[2]}}</p>
+	        </div>
+		<!-- This is the text field -->
+	        <div class="text-content flex justify-center my-4 px-8">
+	                <p>{{post[3]}}</p>
+		</div>
+
+		{% if role == 'admin' %}
+        	 <div class="admin-actions">
+	                <a href="#">Edit</a> |
+                	<a href="{{ url_for('delete_post', post_id=post[0]) }}">Delete</a>
+            	</div>
+       	 	{% endif %}
+
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}

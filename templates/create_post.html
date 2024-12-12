@@ -1,0 +1,14 @@
+
+  GNU nano 4.8                                                                                   templates/blog.html                                                                                             
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex flex-col">
+	<form method="POST">
+		<label>Write your header</label>
+		<input type="text" name="post-header" class="border-2" required /><br>
+		<label>Text field</label>
+		<textarea name="post-textarea" class="border-2" required></textarea><br>
+		<button type="submit">Submit</button>
+	</form>
+</div>
+{% endblock %}

@@ -6,25 +6,25 @@
     <title>{% block title %}Flask App{% endblock %}</title>
     <style>
         body { font-family: Arial, sans-serif; }
-        .navbar { background-color: #333; padding: 10px; }
-        .navbar a { color: white; text-decoration: none; margin-right: 15px; }
-        .navbar a:hover { text-decoration: underline; }
+	.navbar a {padding: 0px 8px 8px 8px; margin-bottom: 2px;}
+	.navbar a:hover {border-bottom: 2px solid #65615a;}
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="mx-4 sm:mx-16 lg:mx-64">
-    <div class="navbar flex justify-around">
+<body class="mx-4 2xl:mx-64 bg-gradient-to-r from-[#99958e] to-[#dbd7d1] h-screen">
+    <div class="navbar block text-[#65615a] font-sans text-center md:text-right p-4 font-semibold">
         <a href="{{ url_for('index') }}">Home</a>
         <a href="/books">Books</a> <!-- Adjust URL as needed -->
-   	<a href="/memes">Memes</a>
+   	<a href="/blog">Blog</a>
+	<a href="/memes"">Memes</a>
 	{% if 'user_id' not in session %}
-	  <a href="/login">Login</a>
+	  <a href="/login"">Login</a>
 	{% else %}
 	  <a href="/logout">Logout</a>
 	{% endif %}
     </div>
     
-    <div class="content m-16">
+    <div class="content sm:m-4 lg:mx-16">
         {% block content %}{% endblock %}
     </div>
 </body>

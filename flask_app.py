@@ -26,6 +26,7 @@ def create_database():
 		year INTEGER,
 		rating REAL) ''')
 	c.execute('''CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT) ''')
+	c.execute('''CREATE TABLE IF NOT EXISTS blogpost (id INTEGER PRIMARY KEY, header TEXT, date DATETIME DEFAULT CURRENT_TIMESTAMP, textfield TEXT )''')
 	conn.commit()
 	conn.close()
 
@@ -198,6 +199,51 @@ def book_list():
 	books = c.fetchall()
 	conn.close()
 	return render_template("books_index.html", books=books)
+
+
+@app.route('/blog')
+def blog_post():
+	conn = sqlite3.connect('person.db')
+	c = conn.cursor()
+	c.execute('SELECT id, header, date, textfield FROM blogpost')
+	blogposts = c.fetchall()
+	conn.close()
+	return render_template("blog.html", blogposts=blogposts, role=session.get('role'))
+
+
+@app.route('/createpost', methods=['GET', 'POST'])
+@role_required('admin')
+def add_post():
+	if request.method == 'POST':
+		header = request.form['post-header']
+		textarea = request.form['post-textarea']
+		if not header:
+			return "Header is required", 400
+		if not textarea:
+			return "Textarea is required", 400
+		conn = sqlite3.connect('person.db')
+		c = conn.cursor()
+		c.execute('INSERT INTO blogpost (header, textfield) VALUES (?, ?)', (header, textarea,))
+		conn.commit()
+		conn.close()
+		return redirect(url_for("blog_post"))
+
+
+	return render_template("create_post.html")
+
+
+@app.route('/deletepost/<int:post_id>' )
+@role_required('admin')
+def delete_post(post_id):
+        conn = sqlite3.connect('person.db')
+        c = conn.cursor()
+        c.execute('DELETE FROM blogpost WHERE id = ?', (post_id,))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('blog_post'))
+
+
+
 
 
 
