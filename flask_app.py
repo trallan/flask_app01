@@ -208,7 +208,18 @@ def blog_post():
 	c.execute('SELECT id, header, date, textfield FROM blogpost')
 	blogposts = c.fetchall()
 	conn.close()
-	return render_template("blog.html", blogposts=blogposts, role=session.get('role'))
+	
+	processed_blogposts = [
+		{
+			"id": post[0],
+			"header":post[1],
+			"date": post[2],
+			"excerpt": post[3][:250],
+			"full_text": post[3]
+		}
+		for post in blogposts
+	]
+	return render_template("blog.html", blogposts=processed_blogposts, role=session.get('role'))
 
 
 @app.route('/createpost', methods=['GET', 'POST'])
@@ -243,6 +254,30 @@ def delete_post(post_id):
         return redirect(url_for('blog_post'))
 
 
+@app.route('/editpost/<int:post_id>', methods=['GET', 'POST'])
+@role_required('admin')
+def edit_post(post_id):
+    conn = sqlite3.connect('person.db')
+    c = conn.cursor()
+
+    if request.method == 'POST':
+        # Update the post in the database
+        header = request.form['post-header']
+        textarea = request.form['post-textarea']
+        if not header or not textarea:
+            return "Header and Textarea are required", 400
+        c.execute('UPDATE blogpost SET header = ?, textfield = ? WHERE id = ?', (header, textarea, post_id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('blog_post'))
+
+    # Fetch the current post data to pre-fill the form
+    c.execute('SELECT header, textfield FROM blogpost WHERE id = ?', (post_id,))
+    post = c.fetchone()
+    conn.close()
+    if not post:
+        return "Post not found", 404
+    return render_template('update_post.html', post_id=post_id, header=post[0], textfield=post[1])
 
 
 

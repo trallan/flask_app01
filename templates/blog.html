@@ -19,24 +19,45 @@
 	-->
 	{% for post in blogposts|reverse %}
 	<div class="text-[#65615a] shadow-[#514e4b] shadow-md m-4 lg:py-32 py-8 bg-[#f4ecdf]">
-		<span class="">Post #{{post[0]}}</span>
+		<span class="">Post #{{post.id}}</span>
 	        <div class="flex justify-center flex-col mb-8">
-	                <h1 class="text-2xl">{{post[1]}}</h1>
-	                <p class="text-[#bdb7ac] text-sm">{{post[2]}}</p>
+	                <h1 class="text-2xl">{{post.header}}</h1>
+	                <p class="text-[#bdb7ac] text-sm">{{post.date}}</p>
 	        </div>
 		<!-- This is the text field -->
-	        <div class="text-content flex justify-center my-4 px-8">
-	                <p>{{post[3]}}</p>
+	        <div class="text-content flex justify-center my-4 px-6 md:px-24">
+                    	<p id="excerpt-{{ post.id }}">
+				{{ post.excerpt }}{% if post.full_text|length > 250 %}... 
+				<a href="#" onclick="showFullText({{ post.id}})" class="font-semibold">read more</a>
+				{% endif %}
+			</p>
+			<p id="full-text-{{ post.id }}" style="display: none;">
+				{{ post.full_text }}
+				<a href="#" onclick="showExcerpt({{ post.id }})" class="font-semibold">show less</a>
+				
+			</p>
 		</div>
 
 		{% if role == 'admin' %}
         	 <div class="admin-actions">
-	                <a href="#">Edit</a> |
-                	<a href="{{ url_for('delete_post', post_id=post[0]) }}">Delete</a>
+			<a href="{{ url_for('edit_post', post_id=post.id) }}">Edit</a> |
+                	<a href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>
             	</div>
        	 	{% endif %}
 
 	</div>
 	{% endfor %}
 </div>
+<script>
+function showFullText(postId) {
+    document.getElementById(`excerpt-${postId}`).style.display = 'none';
+    document.getElementById(`full-text-${postId}`).style.display = 'block';
+}
+
+function showExcerpt(postId) {
+    document.getElementById(`excerpt-${postId}`).style.display = 'block';
+    document.getElementById(`full-text-${postId}`).style.display = 'none';
+}
+</script>
+	
 {% endblock %}

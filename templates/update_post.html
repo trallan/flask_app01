@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Edit Post</h1>
+<form method="POST" action="{{ url_for('edit_post', post_id=post_id) }}">
+    <label for="post-header">Header:</label>
+    <input type="text" id="post-header" name="post-header" value="{{ header }}" required>
+    <br>
+    <label for="post-textarea">Text:</label>
+    <textarea id="post-textarea" name="post-textarea" required>{{ textfield }}</textarea>
+    <br>
+    <button type="submit">Update Post</button>
+</form>
+{% endblock %}
