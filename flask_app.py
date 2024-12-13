@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session, flash, abort
+from flask import Flask, render_template, redirect, url_for, request, session, flash, abort, jsonify
 from flask_socketio import SocketIO, emit
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
@@ -201,6 +201,64 @@ def book_list():
 	return render_template("books_index.html", books=books)
 
 
+def get_all_books():
+	conn = sqlite3.connect('person.db')
+	c = conn.cursor()
+	books = c.execute('SELECT * FROM books').fetchall()
+	conn.close()
+	return books
+
+def search_books(query):
+	conn = sqlite3.connect('person.db')
+	c = conn.cursor()
+	books = c.execute('SELECT * FROM books WHERE title LIKE ? OR author LIKE ?', (f'%{query}%', f'%{query}%')).fetchall()
+	conn.close()
+	return books
+
+
+def get_book_by_id(book_id):
+	conn = sqlite3.connect('person.db')
+	c = conn.cursor()
+	books = c.execute('SELECT * FROM books WHERE id = ?', (book_id,)).fetchone()
+	conn.close()
+	return book
+
+
+@app.route('/chatbot', methods=['GET', 'POST'])
+def chatbot():
+    if request.method == 'POST':
+        # Check if the request is JSON (from JavaScript fetch)
+        if request.is_json:
+            user_input = request.json.get('message', '').lower()
+        else:  # Fallback for form submission
+            user_input = request.form.get('message', '').lower()
+
+        # Default response
+        response = "I can help you with book-related queries. Try 'list books' or 'search <title/author>'."
+
+        # Process user input
+        if 'list books' in user_input:
+            books = get_all_books()
+            response = "Here are the books:\n" + "\n".join([f"{book[1]} by {book[2]}" for book in books])
+        elif 'search' in user_input:
+            query = user_input.replace('search', '').strip()
+            results = search_books(query)
+            if results:
+                response = "Here are the books matching your query:\n" + "\n".join([f"{book[1]} by {book[2]}\n" for book in results])
+            else:
+                response = "No books found matching your query."
+
+        # Return JSON for JavaScript fetch
+        if request.is_json:
+            return jsonify({'response': response})
+        
+        # Render template for browser access
+        return render_template('chatbot.html', response=response)
+    
+    # Render template for GET requests
+    return render_template('chatbot.html', response=None)
+
+
 @app.route('/blog')
 def blog_post():
 	conn = sqlite3.connect('person.db')
@@ -208,7 +266,7 @@ def blog_post():
 	c.execute('SELECT id, header, date, textfield FROM blogpost')
 	blogposts = c.fetchall()
 	conn.close()
-	
+
 	processed_blogposts = [
 		{
 			"id": post[0],
